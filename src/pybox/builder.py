@@ -17,14 +17,21 @@ def get_os_architecture() -> int:
 
 def get_launcher_path(gui: bool = False) -> Path:
     prefix = 'w' if gui else 't'
-    return Path(resource_filename('pip._vendor.distlib', f'{prefix}{get_os_architecture()}.exe'))
+    return Path(
+        resource_filename('pip._vendor.distlib',
+                          f'{prefix}{get_os_architecture()}.exe'))
 
 
 def get_rcedit_path() -> Path:
-    return Path(resource_filename('pybox.rcedit', f'rcedit-x{get_os_architecture()}.exe'))
+    return Path(
+        resource_filename('pybox.rcedit',
+                          f'rcedit-x{get_os_architecture()}.exe'))
 
 
-def call_rcedit(source: Union[Path, str], *, icon: Union[Path, str] = None, version_info: Dict[str, str] = None) -> None:
+def call_rcedit(source: Union[Path, str],
+                *,
+                icon: Union[Path, str] = None,
+                version_info: Dict[str, str] = None) -> None:
     rcedit_path = get_rcedit_path()
     cmd = local[str(rcedit_path)][str(source)]
 
@@ -37,13 +44,20 @@ def call_rcedit(source: Union[Path, str], *, icon: Union[Path, str] = None, vers
     return cmd()
 
 
-def combine_exe(source: Union[Path, str], *parts: Iterable[Union[Path, str]]) -> None:
+def combine_exe(source: Union[Path, str],
+                *parts: Iterable[Union[Path, str]]) -> None:
     with open(source, 'ab') as resulting:
         for part in parts:
             resulting.write(Path(part).read_bytes())
 
 
-def build_exe(source: Union[Path, str], target: Union[Path, str] = None, *, gui: bool = False, icon: Union[Path, str] = None, version_info: Dict[str, str] = None, refresh: bool = False):
+def build_exe(source: Union[Path, str],
+              target: Union[Path, str] = None,
+              *,
+              gui: bool = False,
+              icon: Union[Path, str] = None,
+              version_info: Dict[str, str] = None,
+              refresh: bool = False):
     if not target:
         source_path = Path(source)
         target = source_path.parent / f'{source_path.stem}.exe'

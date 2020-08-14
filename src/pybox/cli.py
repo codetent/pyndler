@@ -1,6 +1,5 @@
 from configparser import ConfigParser
 from typing import TYPE_CHECKING, Dict, Union
-from pathlib import Path
 
 from plumbum import cli
 
@@ -10,18 +9,33 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 
-def parse_config(path: Union[Path, str], *, section: str = 'VERSIONINFO') -> Dict[str, str]:
+def parse_config(path: Union[Path, str],
+                 *,
+                 section: str = 'VERSIONINFO') -> Dict[str, str]:
     parser = ConfigParser()
     parser.read(path)
     return parser[section]
 
 
 class PyBox(cli.Application):
-    target = cli.SwitchAttr(['t', 'target'], argtype=cli.ExistingFile, help='Path to output file. If not set, the source path is taken')
-    icon = cli.SwitchAttr(['i', 'icon'], argtype=cli.ExistingFile, help='Path to exe icon')
-    config = cli.SwitchAttr(['c', 'config'], argtype=cli.ExistingFile, help='Path to config file. For available properties, see: https://msdn.microsoft.com/en-us/library/windows/desktop/aa381058(v=vs.85).aspx')
-    gui = cli.Flag(['--gui'], help='Set to true, if source is a GUI application')
-    refresh = cli.Flag(['--refresh'], help='Refresh Windows icon cache after building')
+    target = cli.SwitchAttr(
+        ['t', 'target'],
+        argtype=cli.ExistingFile,
+        help='Path to output file. If not set, the source path is taken')
+    icon = cli.SwitchAttr(['i', 'icon'],
+                          argtype=cli.ExistingFile,
+                          help='Path to exe icon')
+    config = cli.SwitchAttr(
+        ['c', 'config'],
+        argtype=cli.ExistingFile,
+        help=' '.join((
+            'Path to config file.',
+            'For available properties, see: https://msdn.microsoft.com/en-us/library/windows/desktop/aa381058(v=vs.85).aspx'
+        )))
+    gui = cli.Flag(['--gui'],
+                   help='Set to true, if source is a GUI application')
+    refresh = cli.Flag(['--refresh'],
+                       help='Refresh Windows icon cache after building')
 
     def main(self: 'PyBox', source: cli.ExistingFile) -> None:
         if self.config:
@@ -29,4 +43,9 @@ class PyBox(cli.Application):
         else:
             info = None
 
-        build_exe(source=source, target=self.target, icon=self.icon, version_info=info, gui=self.gui, refresh=self.refresh)
+        build_exe(source=source,
+                  target=self.target,
+                  icon=self.icon,
+                  version_info=info,
+                  gui=self.gui,
+                  refresh=self.refresh)
