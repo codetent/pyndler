@@ -1,15 +1,32 @@
-from argparse import ArgumentParser
+from configparser import ConfigParser
+from typing import TYPE_CHECKING, Dict, Union
+from pathlib import Path
+
+from plumbum import cli
 
 from .builder import build_exe
 
+if TYPE_CHECKING:
+    from pathlib import Path
 
-def run(*args):
-    parser = ArgumentParser(description='Convert .pyz to .exe')
-    parser.add_argument('source', help='Path to source py or pyz file')
-    parser.add_argument('-o', '--target', help='Path to output file. If not set, the filename of the pyz file is taken')
-    parser.add_argument('--icon', help='Path to icon file')
-    #parser.add_argument('--version', help='Version of generated executable')
-    parser.add_argument('--gui', action='store_true', help='Set if the pyz file contains a application')
-    args = parser.parse_args(args=args)
 
-    build_exe(**vars(args))
+def parse_config(path: Union[Path, str], *, section: str = 'VERSIONINFO') -> Dict[str, str]:
+    parser = ConfigParser()
+    parser.read(path)
+    return parser[section]
+
+
+class PyBox(cli.Application):
+    target = cli.SwitchAttr(['t', 'target'], argtype=cli.ExistingFile, help='Path to output file. If not set, the source path is taken')
+    icon = cli.SwitchAttr(['i', 'icon'], argtype=cli.ExistingFile, help='Path to exe icon')
+    config = cli.SwitchAttr(['c', 'config'], argtype=cli.ExistingFile, help='Path to config file. For available properties, see: https://msdn.microsoft.com/en-us/library/windows/desktop/aa381058(v=vs.85).aspx')
+    gui = cli.Flag(['--gui'], help='Set to true, if source is a GUI application')
+    refresh = cli.Flag(['--refresh'], help='Refresh Windows icon cache after building')
+
+    def main(self: 'PyBox', source: cli.ExistingFile) -> None:
+        if self.config:
+            info = parse_config(self.config)
+        else:
+            info = None
+
+        build_exe(source=source, target=self.target, icon=self.icon, version_info=info, gui=self.gui, refresh=self.refresh)
