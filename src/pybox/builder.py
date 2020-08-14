@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import struct
 from pkg_resources import resource_filename
 from pathlib import Path
@@ -15,17 +17,15 @@ def get_os_architecture() -> int:
     return struct.calcsize('P') * 8
 
 
-def get_launcher_path(gui: bool = False) -> Path:
+def get_launcher_path(*, gui: bool = False, arch: int = None) -> Path:
     prefix = 'w' if gui else 't'
-    return Path(
-        resource_filename('pip._vendor.distlib',
-                          f'{prefix}{get_os_architecture()}.exe'))
+    arch = arch if arch else get_os_architecture()
+    return Path(resource_filename('pip._vendor.distlib', f'{prefix}{arch}.exe'))
 
 
-def get_rcedit_path() -> Path:
-    return Path(
-        resource_filename('pybox.rcedit',
-                          f'rcedit-x{get_os_architecture()}.exe'))
+def get_rcedit_path(*, arch: int = None) -> Path:
+    arch = arch if arch else get_os_architecture()
+    return Path(resource_filename('pybox.rcedit', f'rcedit-x{arch}.exe'))
 
 
 def call_rcedit(source: Union[Path, str],
@@ -44,8 +44,7 @@ def call_rcedit(source: Union[Path, str],
     return cmd()
 
 
-def combine_exe(source: Union[Path, str],
-                *parts: Iterable[Union[Path, str]]) -> None:
+def merge_files(source: Union[Path, str], *parts: Iterable[Union[Path, str]]) -> None:
     with open(source, 'ab') as resulting:
         for part in parts:
             resulting.write(Path(part).read_bytes())
@@ -66,7 +65,7 @@ def build_exe(source: Union[Path, str],
     copy(launcher_path, target)
 
     call_rcedit(target, icon=icon, version_info=version_info)
-    combine_exe(target, source)
+    merge_files(target, source)
 
     if icon and refresh:
         refresh_icon_cache()
