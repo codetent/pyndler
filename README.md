@@ -7,13 +7,13 @@
 PyBox is a lightweight tool for bundling a pyz file in an exe file. If an executable is deployed, it can also be useful
 to set an executable icon or additional metadata (product name, company name, versions, ...).
 
-This project is really useful if the actual application is packed using ![shiv](https://github.com/linkedin/shiv) and then converted to an executable using PyBox.
+This project is really useful if the actual application is packed using [shiv](https://github.com/linkedin/shiv) and then converted to an executable using PyBox.
 
 ## How does it work?
 
-PyBox uses the fantastic python distlib launcher mentioned in ![PEP 397](https://www.python.org/dev/peps/pep-0397/).
+PyBox uses the fantastic python distlib launcher mentioned in [PEP 397](https://www.python.org/dev/peps/pep-0397/).
 
-First, the pylauncher is copied to the target path. Then the pyz file is appended to the launcher. Afterwards, an additional icon or metadata is set using ![rcedit](https://github.com/electron/rcedit) - a great project usually used for branding electron project.
+First, the pylauncher is copied to the target path. Then the pyz file is appended to the launcher. Afterwards, an additional icon or metadata is set using [rcedit](https://github.com/electron/rcedit) - a great project usually used for branding electron project.
 
 ## Usage
 
@@ -39,3 +39,5 @@ Example call:
 ```
 pybox example.pyz --icon icon.ico --config app.cfg
 ```
+
+The metadata config file must be written using INI-like syntax with keys listed [here](https://docs.microsoft.com/de-de/windows/win32/menurc/versioninfo-resource?redirectedfrom=MSDN).
