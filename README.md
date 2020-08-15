@@ -1,6 +1,5 @@
 ![Python package](https://github.com/codetent/pybox/workflows/Python%20package/badge.svg)
 ![License](https://img.shields.io/github/license/codetent/pybox)
-![Release](https://img.shields.io/github/v/release/codetent/pybox)
 
 # PyBox
 
