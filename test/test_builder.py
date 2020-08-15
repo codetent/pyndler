@@ -3,7 +3,7 @@ from pathlib import Path
 from zipapp import create_archive
 
 from plumbum import local
-from pybox import builder
+from pyndler import builder
 
 
 def test_os_arch():

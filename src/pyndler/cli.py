@@ -26,7 +26,7 @@ def parse_config(path: Union[Path, str], *, section: str = 'VERSIONINFO') -> Dic
     return parser[section]
 
 
-class PyBox(cli.Application):
+class Pyndler(cli.Application):
     """CLI builder application."""
     target = cli.SwitchAttr(['t', 'target'],
                             argtype=cli.ExistingFile,
@@ -39,7 +39,7 @@ class PyBox(cli.Application):
     refresh = cli.Flag(['--refresh'], help='Refresh Windows icon cache after building')
 
     @cli.positional(cli.ExistingFile)
-    def main(self: 'PyBox', source: str) -> None:
+    def main(self: 'Pyndler', source: str) -> None:
         """Main entrypoint for cli app."""
         if self.config:
             metadata = parse_config(self.config)

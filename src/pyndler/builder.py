@@ -44,7 +44,7 @@ def get_rcedit_path(*, arch: int = None) -> Path:
                               Defaults to None.
     """
     arch = arch if arch else get_os_architecture()
-    return Path(resource_filename('pybox.rcedit', f'rcedit-x{arch}.exe'))
+    return Path(resource_filename('pyndler.rcedit', f'rcedit-x{arch}.exe'))
 
 
 def call_rcedit(source: Union[Path, str], *, icon: Union[Path, str] = None, metadata: Dict[str, str] = None) -> None:
