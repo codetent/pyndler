@@ -28,7 +28,8 @@ class PyBox(cli.Application):
     gui = cli.Flag(['--gui'], help='Set to true, if source is a GUI application')
     refresh = cli.Flag(['--refresh'], help='Refresh Windows icon cache after building')
 
-    def main(self: 'PyBox', source: cli.ExistingFile) -> None:
+    @cli.positional(cli.ExistingFile)
+    def main(self, source) -> None:
         if self.config:
             info = parse_config(self.config)
         else:
