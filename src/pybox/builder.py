@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import struct
-from pkg_resources import resource_filename
 from pathlib import Path
+from pkg_resources import resource_filename
 from shutil import copy
-from typing import Union, Dict, Iterable
+from typing import Dict, Iterable, Union
 
 from plumbum import local
 
@@ -38,7 +38,7 @@ def call_rcedit(source: Union[Path, str],
     if icon:
         cmd = cmd['--set-icon', str(icon)]
 
-    for key, value in (version_info or dict()).items():
+    for key, value in (version_info or {}).items():
         cmd = cmd['--set-version-string', key, value]
 
     return cmd()
@@ -56,7 +56,7 @@ def build_exe(source: Union[Path, str],
               gui: bool = False,
               icon: Union[Path, str] = None,
               version_info: Dict[str, str] = None,
-              refresh: bool = False):
+              refresh: bool = False) -> None:
     if not target:
         source_path = Path(source)
         target = source_path.parent / f'{source_path.stem}.exe'

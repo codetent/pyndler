@@ -29,7 +29,7 @@ class PyBox(cli.Application):
     refresh = cli.Flag(['--refresh'], help='Refresh Windows icon cache after building')
 
     @cli.positional(cli.ExistingFile)
-    def main(self, source) -> None:
+    def main(self: 'PyBox', source: str) -> None:
         if self.config:
             info = parse_config(self.config)
         else:
