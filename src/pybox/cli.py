@@ -1,3 +1,4 @@
+"""Constructs for cli builder app."""
 from __future__ import annotations
 
 from configparser import ConfigParser
@@ -12,12 +13,21 @@ if TYPE_CHECKING:
 
 
 def parse_config(path: Union[Path, str], *, section: str = 'VERSIONINFO') -> Dict[str, str]:
+    """Parse config file containing executable metadata.
+
+    The file must have the following format:
+    [VERSIONINFO]
+    <key>=<value>
+
+    Available keys can be found here: https://bit.ly/3aoo2i7.
+    """
     parser = ConfigParser()
     parser.read(path)
     return parser[section]
 
 
 class PyBox(cli.Application):
+    """CLI builder application."""
     target = cli.SwitchAttr(['t', 'target'],
                             argtype=cli.ExistingFile,
                             help='Path to output file. If not set, the source path is taken')
@@ -30,14 +40,15 @@ class PyBox(cli.Application):
 
     @cli.positional(cli.ExistingFile)
     def main(self: 'PyBox', source: str) -> None:
+        """Main entrypoint for cli app."""
         if self.config:
-            info = parse_config(self.config)
+            metadata = parse_config(self.config)
         else:
-            info = None
+            metadata = None
 
         build_exe(source=source,
                   target=self.target,
                   icon=self.icon,
-                  version_info=info,
+                  metadata=metadata,
                   gui=self.gui,
                   refresh=self.refresh)
