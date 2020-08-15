@@ -1,4 +1,6 @@
 ![Python package](https://github.com/codetent/pybox/workflows/Python%20package/badge.svg)
+![License](https://img.shields.io/github/license/codetent/pybox)
+![Release](https://img.shields.io/github/v/release/codetent/pybox)
 
 # PyBox
 
@@ -7,7 +9,7 @@
 PyBox is a lightweight tool for bundling a pyz file in an exe file. If an executable is deployed, it can also be useful
 to set an executable icon or additional metadata (product name, company name, versions, ...).
 
-This project is really useful if the actual application is packed using [shiv](https://github.com/linkedin/shiv) and then converted to an executable using PyBox.
+Python projects must be bundled using [shiv](https://github.com/linkedin/shiv), [zipapp](https://docs.python.org/3/library/zipapp.html) or any other pyz-like packaging tool, before they can be bundled as .exe files using PyBox.
 
 ## How does it work?
 
@@ -40,4 +42,9 @@ Example call:
 pybox example.pyz --icon icon.ico --config app.cfg
 ```
 
-The metadata config file must be written using INI-like syntax with keys listed [here](https://docs.microsoft.com/de-de/windows/win32/menurc/versioninfo-resource?redirectedfrom=MSDN).
+The metadata config file must be written using INI-like syntax with keys listed [here](https://docs.microsoft.com/de-de/windows/win32/menurc/versioninfo-resource?redirectedfrom=MSDN), grouped in a `VERSIONINFO` section like:
+
+```
+[VERSIONINFO]
+<key>=<value>
+```
