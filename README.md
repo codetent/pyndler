@@ -12,7 +12,7 @@ Python projects must be bundled using [shiv](https://github.com/linkedin/shiv), 
 
 ## How does it work?
 
-Pyndler uses the fantastic python distlib launcher mentioned in [PEP 397](https://www.python.org/dev/peps/pep-0397/).
+Pyndler uses the fantastic python [simple launcher](https://bitbucket.org/vinay.sajip/simple_launcher/src/master/) mentioned in [PEP 397](https://www.python.org/dev/peps/pep-0397/).
 
 First, the pylauncher is copied to the target path. Then the pyz file is appended to the launcher. Afterwards, an additional icon or metadata is set using [rcedit](https://github.com/electron/rcedit) - a great project usually used for branding electron project.
 
@@ -47,3 +47,5 @@ The metadata config file must be written using INI-like syntax with keys listed 
 [VERSIONINFO]
 <key>=<value>
 ```
+
+For info about setting an explicit python interpreter, see [this](https://bitbucket.org/vinay.sajip/simple_launcher/wiki/Launching%20an%20interpreter%20in%20a%20location%20relative%20to%20the%20launcher%20executable) wiki page.
